@@ -32,7 +32,7 @@ autoinstall:
   identity:
     hostname: local01
 # openssl passwd -1 -stdin <<< PASSWORD
-    password: $6$NJ2eP5G/Bx.CLI1A$JBZaY5892E2SKmo2wGNdWS3FxiW6FwQ4nK05HSIKRNWvGUWC4LpsfUZJZ3pj2hG3FmO/t3JgBd0ZrXDTduCRq.
+    password:
     realname: Michael Kronvold
     username: mkronvold
   kernel:
