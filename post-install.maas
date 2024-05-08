@@ -1,0 +1,10 @@
+set -x
+cd /
+snap install maas
+apt install --yes postgresql
+sudo -u postgres psql -c "CREATE USER \"maascli\" WITH ENCRYPTED PASSWORD 'maascli'"
+sudo -u postgres createdb -O "maascli" "maasclidb"
+sudo echo "host    maasclidb       maascli         0/0                     md5" >> /etc/postgresql/14/main/pg_hba.conf
+printf "\n" | maas init region+rack --database-uri "postgres://maascli:maascli@localhost/maasclidb"
+maas createadmin --username=admin --password=admin --email=admin@admin.com --ssh-import=gh:mkronvold
+set +x

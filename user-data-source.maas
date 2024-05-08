@@ -1,0 +1,103 @@
+#cloud-config
+autoinstall:
+  apt:
+    disable_components: []
+    fallback: abort
+    geoip: true
+    mirror-selection:
+      primary:
+      - country-mirror
+      - arches: &id001
+        - amd64
+        - i386
+        uri: http://archive.ubuntu.com/ubuntu/
+      - arches: &id002
+        - s390x
+        - arm64
+        - armhf
+        - powerpc
+        - ppc64el
+        - riscv64
+        uri: http://ports.ubuntu.com/ubuntu-ports
+    preserve_sources_list: false
+    security:
+    - arches: *id001
+      uri: http://security.ubuntu.com/ubuntu/
+    - arches: *id002
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  codecs:
+    install: false
+  drivers:
+    install: false
+  identity:
+    hostname: local01
+# openssl passwd -1 -stdin <<< PASSWORD
+    password: $6$NJ2eP5G/Bx.CLI1A$JBZaY5892E2SKmo2wGNdWS3FxiW6FwQ4nK05HSIKRNWvGUWC4LpsfUZJZ3pj2hG3FmO/t3JgBd0ZrXDTduCRq.
+    realname: Michael Kronvold
+    username: mkronvold
+  kernel:
+    package: linux-generic
+  keyboard:
+    layout: us
+    toggle: null
+    variant: ''
+  locale: en_US.UTF-8
+  network:
+    ethernets:
+      eth0:
+        dhcp4: true
+    version: 2
+  oem:
+    install: auto
+  source:
+    id: ubuntu-server
+    search_drivers: false
+  ssh:
+    allow-pw: false
+    authorized-keys:
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAiEVbSCs3hGus9n11ThcaeIoMsFCZtfB9sMUi75ZO7d391K/9Gb6tPYn2tulHw87QDqDz7acAmdFxCi+PWWTwpO51TAm17GeCPEDAGcoON7hq71fJHjIQ52U5D4GJfgYLbWVk95+KSN+Bq16Tn3Y0wCnm2Zm+LqjfaSvNwR73Q0k=
+      mkronvold@github/77842858 # ssh-import-id gh:mkronvold'
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEAo/9UMIf0Iq/07LUYyHlwu7Q5fodRZuqth56zsZiXeCMNeRRBhEWA/a+KpXjdgaW5pRyD7Tew6mf2EIWEM7NEPujfSdzMuRp/Uw8E7m/+hkVNCCEsYYe96IR8ldFgkfqi6UGIQZkKTgzli5mRAcPbU5xByAf9cNmC32yN9XFHPoaiiIzWQXtgWf81wAszBa6bP5PdJJK+GfapoLgn5hbHsGqH0H667XxZas73EvoKjHpy89XH0Z5jaHKIxbgHGwUvOBqZ4fUTlDm8teeOs+GdneCblHuXXF8+2HP4bWaifch8YANJutytsQI9DfcjhX+jRB7ZWOl1go+UEKjoY7R91G31t+At1qMKDynU+RBasRnXvlq41/Pf9xJANEaql7LxzJ9JCag88AyA6jjUJsYssOkWx7NizlHb5HPmJ3CHMqKcAyZSBf624DbRfqh5jAG+mCNLzxFoXf7H+5sGwKLiMzKa+k/M4fCjCft4iAVu9fSqPyx/ST465XOd4hPQ9y18E/f+G2PbCZjJBFk03XtFUPIT0OGB00QvtwrK8f4eGS45/xKBU6ALu83fAfph8DZLxUOUSYCRa3JkOiaNe+MlWFUbWB2XLigHAP4owRXm0+s1GBf/5VGXB4Op7UPJP6I3ToIgtxnOeAw3XHRwAqjHpCeoGN/qj2IfT/+YEQnQZuU=
+      mkronvold@github/84731993 # ssh-import-id gh:mkronvold'
+    install-server: true
+  storage:
+    layout:
+      name: zfs
+      match:
+        size: largest
+  timezone: UTC
+  updates: security
+  version: 1
+# runcmd:
+#    # Note: Don't write files to /tmp from cloud-init use /run/somedir instead.
+#    # Early boot environments can race systemd-tmpfiles-clean LP: #1707222.
+  late-commands:
+  - eject /dev/sr1
+  - [ apt-get, update, -y ]
+  - [ apt, install, --yes, emacs-nox ]
+  - echo "c2V0IC14CmNkIC8Kc25hcCBpbnN0YWxsIG1hYXMKYXB0IGluc3RhbGwgLS15ZXMgcG9zdGdyZXNxbApzdWRvIC11IHBvc3RncmVzIHBzcWwgLWMgIkNSRUFURSBVU0VSIFwibWFhc2NsaVwiIFdJVEggRU5DUllQVEVEIFBBU1NXT1JEICdtYWFzY2xpJyIKc3VkbyAtdSBwb3N0Z3JlcyBjcmVhdGVkYiAtTyAibWFhc2NsaSIgIm1hYXNjbGlkYiIKc3VkbyBlY2hvICJob3N0ICAgIG1hYXNjbGlkYiAgICAgICBtYWFzY2xpICAgICAgICAgMC8wICAgICAgICAgICAgICAgICAgICAgbWQ1IiA+PiAvZXRjL3Bvc3RncmVzcWwvMTQvbWFpbi9wZ19oYmEuY29uZgpwcmludGYgIlxuIiB8IG1hYXMgaW5pdCByZWdpb24rcmFjayAtLWRhdGFiYXNlLXVyaSAicG9zdGdyZXM6Ly9tYWFzY2xpOm1hYXNjbGlAbG9jYWxob3N0L21hYXNjbGlkYiIKbWFhcyBjcmVhdGVhZG1pbiAtLXVzZXJuYW1lPWFkbWluIC0tcGFzc3dvcmQ9YWRtaW4gLS1lbWFpbD1hZG1pbkBhZG1pbi5jb20gLS1zc2gtaW1wb3J0PWdoOm1rcm9udm9sZApzZXQgK3gK" | base64 -d > /target/root/install-maas.sh
+  - chmod +x /target/root/install-maas.sh
+#  - curtin in-target --target=/target -- /root/install-maas.sh
+#  - [ sh, -xc, "echo 'MAAS IP:' $(ip addr show eth0)" ]
+#  - cp -rp /cdrom/mnt /target/
+#  - chmod +x /target/mnt/script/install-pkgs.sh
+#  - curtin in-target --target=/target -- /mnt/script/install-pkgs.sh
+  user-data:
+    content:
+      #cloud-config
+      write_files:
+        - path: /root/install-maas.sh
+          content: |
+            set -x
+            cd /
+            snap install maas
+            apt install --yes postgresql
+            sudo -u postgres psql -c "CREATE USER \"maascli\" WITH ENCRYPTED PASSWORD 'maascli'"
+            sudo -u postgres createdb -O "maascli" "maasclidb"
+            sudo echo "host    maasclidb       maascli         0/0                     md5" >> /etc/postgresql/14/main/pg_hba.conf
+            printf "\n" | maas init region+rack --database-uri "postgres://maascli:maascli@localhost/maasclidb"
+            maas createadmin --username=admin --password=admin --email=admin@admin.com --ssh-import=gh:mkronvold
+            set +x
+          permissions: '0755'
+      bootcmd:
+        - [ cloud-init-per, instance, install-maas, /root/install-maas.sh ]

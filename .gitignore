@@ -1,0 +1,7 @@
+*.iso
+*.vhd
+*.vhdx
+VMs/*
+ISOs/*
+seeds/*
+tools/*
